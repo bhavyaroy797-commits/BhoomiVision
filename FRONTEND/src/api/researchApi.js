@@ -182,6 +182,126 @@ export const MOCK_RESEARCH_GAPS = [
   },
 ];
 
+export const MOCK_DATASETS = [
+  {
+    id: 'ds_01',
+    name: 'ISRO Bhuvan Multi-Spectral LULC Time-Series',
+    category: 'Land Use / Satellite',
+    source: 'National Remote Sensing Centre (NRSC) / ISRO',
+    location: 'Nadia & West Bengal Districts',
+    timePeriod: '2015 – 2025 (Annual)',
+    dataType: 'GeoTIFF / Raster Vector Layers',
+    description: '10m resolution land use and land cover satellite raster dataset with 14 micro-land classification tags.',
+    availability: 'Open Research Access (Demo Data)',
+    evidenceStatus: 'High Confidence (ISRO Certified)',
+  },
+  {
+    id: 'ds_02',
+    name: 'DILRMP Digitized Record of Rights (RoR) Plot Registry',
+    category: 'Land Records / Governance',
+    source: 'West Bengal Land & Land Reforms Department',
+    location: 'Krishnanagar & Ranaghat Blocks',
+    timePeriod: '2020 – 2025',
+    dataType: 'Vector GeoJSON & Structured JSON',
+    description: 'Geo-referenced cadastral plot boundary registry with mutation timeline logs and dispute status markers.',
+    availability: 'Restricted Academic Access (Demo Data)',
+    evidenceStatus: 'High Confidence (Govt Registry)',
+  },
+  {
+    id: 'ds_03',
+    name: 'ICAR National Agricultural Soil Organic Carbon Survey',
+    category: 'Agriculture / Environment',
+    source: 'Indian Council of Agricultural Research (ICAR)',
+    location: 'All India / Eastern Agro-Climatic Zone',
+    timePeriod: '2018 – 2024',
+    dataType: 'Tabular CSV & Spatial Heatmap',
+    description: 'Soil health metrics including topsoil organic carbon percentage, nitrogen degradation, and clay extraction impact.',
+    availability: 'Public Research Index (Demo Data)',
+    evidenceStatus: 'High Confidence (ICAR Census)',
+  },
+  {
+    id: 'ds_04',
+    name: 'District Land Dispute Litigation & Tribunal Case Registry',
+    category: 'Demographics / Policy',
+    source: 'National Legal Services Authority (NALSA) & District Courts',
+    location: 'Nadia & Murshidabad Districts',
+    timePeriod: '2019 – 2024',
+    dataType: 'Tabular Dataset & Case Code Index',
+    description: '12,400+ anonymized land boundary dispute filings classified by inheritance fragmentation, mutation delay, and court latency.',
+    availability: 'Anonymized Research Preview (Demo Data)',
+    evidenceStatus: 'Medium Confidence (Judicial Registry)',
+  },
+];
+
+export const MOCK_ACTIVE_RESEARCH_PROJECTS = [
+  {
+    id: 'proj_01',
+    title: 'Agricultural Land Transformation & Shrinkage Analysis',
+    location: 'Nadia, West Bengal',
+    pipelineStep: 'Analysis → GIS Visualization',
+    lastActivity: '2 hours ago',
+    progressPercent: 75,
+    keyFocus: 'Quantifying paddy cropland conversion along NH-34 corridor using Sentinel-2 time series.',
+  },
+  {
+    id: 'proj_02',
+    title: 'Urban Expansion & Land Tenure Disputes Correlation',
+    location: 'Gangetic Plains, West Bengal',
+    pipelineStep: 'Evidence → GIS Spatial Correlation',
+    lastActivity: '1 day ago',
+    progressPercent: 50,
+    keyFocus: 'Mapping boundary litigation hotspots against un-updated ancestral RoRs.',
+  },
+  {
+    id: 'proj_03',
+    title: 'Soil Organic Carbon Sequestration under Agroforestry',
+    location: 'Ahmednagar, Maharashtra',
+    pipelineStep: 'Dataset Collection → Pattern Discovery',
+    lastActivity: '3 days ago',
+    progressPercent: 35,
+    keyFocus: 'ICAR soil carbon recovery analysis across restored degraded land.',
+  },
+];
+
+export const MOCK_RESEARCH_ACTIVITIES = [
+  {
+    time: 'TODAY, 10:42 AM',
+    action: 'Analysed Sentinel-2 LULC Agricultural Land Dataset',
+    category: 'Analysis',
+  },
+  {
+    time: 'TODAY, 09:30 AM',
+    action: 'Explored Nadia District GIS Cadastral Vector Layer',
+    category: 'GIS',
+  },
+  {
+    time: 'YESTERDAY',
+    action: 'Saved 3 High-Confidence Research Evidence Items',
+    category: 'Evidence',
+  },
+  {
+    time: '2 DAYS AGO',
+    action: 'Executed Multi-Temporal Land-Use Trend Comparison (2010–2025)',
+    category: 'Patterns',
+  },
+];
+
+export const MOCK_RESEARCH_PATTERNS_CHART_DATA = [
+  { year: '2010', Agricultural: 64.5, BuiltUp: 18.2, Forest: 12.1, Water: 5.2 },
+  { year: '2015', Agricultural: 58.8, BuiltUp: 22.4, Forest: 13.5, Water: 5.3 },
+  { year: '2020', Agricultural: 54.1, BuiltUp: 27.6, Forest: 13.1, Water: 5.2 },
+  { year: '2025', Agricultural: 52.1, BuiltUp: 30.6, Forest: 12.3, Water: 5.0 },
+];
+
+export const MOCK_KNOWLEDGE_NODES = [
+  { label: 'Research Question', sub: 'Agricultural Land Change', color: 'bg-[#064e3b] text-white' },
+  { label: 'Evidence', sub: 'NRSC Satellite Papers', color: 'bg-emerald-100 text-emerald-950 border border-emerald-300' },
+  { label: 'Dataset', sub: 'Sentinel-2 & RoR Plots', color: 'bg-emerald-100 text-emerald-950 border border-emerald-300' },
+  { label: 'GIS Layer', sub: 'LULC 10m Vector Overlay', color: 'bg-emerald-100 text-emerald-950 border border-emerald-300' },
+  { label: 'Policy Impact', sub: 'RFCTLARR & DILRMP Policy', color: 'bg-emerald-100 text-emerald-950 border border-emerald-300' },
+  { label: 'Governance', sub: 'Panchayat Land Records', color: 'bg-[#064e3b] text-white' },
+];
+
 // Helper functions for mock research queries
 export const getFilteredResearch = ({ category, state, district, year, researchType, searchKeyword }) => {
   return MOCK_RESEARCH_PAPERS.filter((paper) => {
@@ -211,3 +331,4 @@ export const getAIResearchResponse = (question, location = 'Nadia, West Bengal')
     suggestedGap: MOCK_RESEARCH_GAPS[0],
   };
 };
+

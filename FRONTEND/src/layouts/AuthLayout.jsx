@@ -1,8 +1,11 @@
 import React from 'react';
-import { Outlet, Link } from 'react-router-dom';
-import { Search, MapPin, FileText, CheckCircle2, Leaf, Youtube, Linkedin, Twitter } from 'lucide-react';
+import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Search, MapPin, FileText, CheckCircle2, Leaf, Youtube, Linkedin, Twitter, Database, Layers, Scale, ShieldCheck, Sparkles, Network } from 'lucide-react';
 
 export const AuthLayout = () => {
+  const location = useLocation();
+  const isResearcherAuth = location.pathname.startsWith('/auth/researcher');
+
   return (
     <div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-emerald-950/5 via-emerald-900/5 to-slate-100 text-slate-800 relative overflow-x-hidden font-sans">
       {/* Background Decorative Landscape Overlay */}
@@ -27,7 +30,7 @@ export const AuthLayout = () => {
               BHOOMIVISION
             </h1>
             <p className="text-[11px] font-medium text-emerald-700 tracking-wide">
-              Land Insights for a Better Tomorrow
+              {isResearcherAuth ? 'National Land Research & Intelligence Platform' : 'Land Insights for a Better Tomorrow'}
             </p>
           </div>
         </Link>
@@ -47,77 +50,160 @@ export const AuthLayout = () => {
           
           {/* LEFT HERO PANEL */}
           <div className="lg:col-span-6 space-y-6 text-left pr-0 lg:pr-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/80 text-emerald-900 text-xs font-semibold border border-emerald-300/50 shadow-xs">
-              <Leaf className="w-4 h-4 text-emerald-700" />
-              <span>Evidence-Based Land Governance</span>
-            </div>
-
-            <div className="space-y-3">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#064e3b] tracking-tight leading-tight">
-                Welcome to <br />
-                <span className="text-emerald-700">BHOOMIVISION</span>
-              </h2>
-              <p className="text-slate-600 text-base sm:text-lg font-normal max-w-xl leading-relaxed">
-                Your trusted platform for land research, policy innovation and GIS-based insights.
-              </p>
-            </div>
-
-            {/* Feature Highlights Grid */}
-            <div className="space-y-4 pt-2">
-              <div className="flex items-start gap-3.5 group">
-                <div className="w-10 h-10 rounded-full bg-emerald-100/70 border border-emerald-200 flex items-center justify-center text-emerald-800 shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                  <Search className="w-5 h-5" />
+            {isResearcherAuth ? (
+              /* RESEARCHER VISUAL SECTION */
+              <div className="space-y-6">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#064e3b] text-emerald-100 text-xs font-bold shadow-md">
+                  <Search className="w-4 h-4 text-emerald-300" />
+                  <span>BHOOMIVISION RESEARCH WORKSPACE</span>
                 </div>
-                <div>
-                  <h3 className="font-bold text-slate-800 text-base">Explore</h3>
-                  <p className="text-xs text-slate-600 leading-normal">
-                    Research, data and insights on land governance across India.
+
+                <div className="space-y-3">
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#064e3b] tracking-tight leading-tight">
+                    Research Beyond <br />
+                    <span className="text-emerald-700">Data.</span>
+                  </h2>
+                  <p className="text-slate-700 text-base sm:text-lg font-normal max-w-xl leading-relaxed">
+                    Explore evidence, datasets, GIS intelligence, land-use trends and policy connections through one integrated research workspace.
                   </p>
                 </div>
-              </div>
 
-              <div className="flex items-start gap-3.5 group">
-                <div className="w-10 h-10 rounded-full bg-emerald-100/70 border border-emerald-200 flex items-center justify-center text-emerald-800 shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                  <MapPin className="w-5 h-5" />
+                {/* Conceptual Intelligence Network Diagram */}
+                <div className="p-4 bg-white/90 backdrop-blur-md rounded-2xl border border-emerald-900/15 shadow-sm space-y-3">
+                  <p className="text-[11px] font-extrabold text-emerald-900 uppercase tracking-wider flex items-center gap-1.5">
+                    <Network className="w-3.5 h-3.5 text-emerald-700" />
+                    <span>Conceptual Land Intelligence Pipeline</span>
+                  </p>
+                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 text-center text-[10px] font-bold">
+                    <div className="p-2 bg-emerald-100/80 text-emerald-950 rounded-xl border border-emerald-300">RESEARCH</div>
+                    <div className="p-2 bg-emerald-100/80 text-emerald-950 rounded-xl border border-emerald-300">EVIDENCE</div>
+                    <div className="p-2 bg-emerald-100/80 text-emerald-950 rounded-xl border border-emerald-300">DATA</div>
+                    <div className="p-2 bg-emerald-100/80 text-emerald-950 rounded-xl border border-emerald-300">GIS</div>
+                    <div className="p-2 bg-emerald-100/80 text-emerald-950 rounded-xl border border-emerald-300">POLICY</div>
+                    <div className="p-2 bg-[#064e3b] text-white rounded-xl shadow-xs">GOVERNANCE</div>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-bold text-slate-800 text-base">Visualize</h3>
-                  <p className="text-xs text-slate-600 leading-normal">
-                    Access GIS maps and spatial analysis for better decision-making.
+
+                {/* Feature Highlights Grid */}
+                <div className="space-y-3 pt-1">
+                  <div className="flex items-start gap-3.5 group">
+                    <div className="w-9 h-9 rounded-xl bg-emerald-100/80 border border-emerald-300 flex items-center justify-center text-emerald-800 shrink-0">
+                      <Database className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-slate-800 text-sm">Evidence & Data Integration</h3>
+                      <p className="text-xs text-slate-600 leading-normal">
+                        Multi-source scientific datasets, satellite observations & land tribunal registries.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3.5 group">
+                    <div className="w-9 h-9 rounded-xl bg-emerald-100/80 border border-emerald-300 flex items-center justify-center text-emerald-800 shrink-0">
+                      <Layers className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-slate-800 text-sm">GIS Spatial Intelligence</h3>
+                      <p className="text-xs text-slate-600 leading-normal">
+                        High-resolution multi-spectral LULC overlays and geo-referenced plot boundaries.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3.5 group">
+                    <div className="w-9 h-9 rounded-xl bg-emerald-100/80 border border-emerald-300 flex items-center justify-center text-emerald-800 shrink-0">
+                      <Scale className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-slate-800 text-sm">Policy & Gap Synthesis</h3>
+                      <p className="text-xs text-slate-600 leading-normal">
+                        Automated identification of research gaps for evidence-based policy formulation.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex items-center gap-2 text-emerald-950 text-xs font-bold italic">
+                  <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0" />
+                  <span>National Digital Platform for Research, Policy Innovation & Evidence-Based Land Governance</span>
+                </div>
+              </div>
+            ) : (
+              /* DEFAULT PUBLIC HERO PANEL */
+              <>
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/80 text-emerald-900 text-xs font-semibold border border-emerald-300/50 shadow-xs">
+                  <Leaf className="w-4 h-4 text-emerald-700" />
+                  <span>Evidence-Based Land Governance</span>
+                </div>
+
+                <div className="space-y-3">
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#064e3b] tracking-tight leading-tight">
+                    Welcome to <br />
+                    <span className="text-emerald-700">BHOOMIVISION</span>
+                  </h2>
+                  <p className="text-slate-600 text-base sm:text-lg font-normal max-w-xl leading-relaxed">
+                    Your trusted platform for land research, policy innovation and GIS-based insights.
                   </p>
                 </div>
-              </div>
 
-              <div className="flex items-start gap-3.5 group">
-                <div className="w-10 h-10 rounded-full bg-emerald-100/70 border border-emerald-200 flex items-center justify-center text-emerald-800 shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                  <FileText className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-slate-800 text-base">Innovate</h3>
-                  <p className="text-xs text-slate-600 leading-normal">
-                    Find policy solutions and research gaps for sustainable land management.
-                  </p>
-                </div>
-              </div>
+                {/* Feature Highlights Grid */}
+                <div className="space-y-4 pt-2">
+                  <div className="flex items-start gap-3.5 group">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100/70 border border-emerald-200 flex items-center justify-center text-emerald-800 shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                      <Search className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-slate-800 text-base">Explore</h3>
+                      <p className="text-xs text-slate-600 leading-normal">
+                        Research, data and insights on land governance across India.
+                      </p>
+                    </div>
+                  </div>
 
-              <div className="flex items-start gap-3.5 group">
-                <div className="w-10 h-10 rounded-full bg-emerald-100/70 border border-emerald-200 flex items-center justify-center text-emerald-800 shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                  <CheckCircle2 className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-slate-800 text-base">Build a Sustainable Future</h3>
-                  <p className="text-xs text-slate-600 leading-normal">
-                    Together for better land governance and a stronger tomorrow.
-                  </p>
-                </div>
-              </div>
-            </div>
+                  <div className="flex items-start gap-3.5 group">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100/70 border border-emerald-200 flex items-center justify-center text-emerald-800 shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                      <MapPin className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-slate-800 text-base">Visualize</h3>
+                      <p className="text-xs text-slate-600 leading-normal">
+                        Access GIS maps and spatial analysis for better decision-making.
+                      </p>
+                    </div>
+                  </div>
 
-            {/* Bottom Quote Banner */}
-            <div className="pt-4 flex items-center gap-2 text-emerald-900/90 text-xs font-semibold italic">
-              <Leaf className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Healthy Land • Stronger Communities • A Sustainable India</span>
-            </div>
+                  <div className="flex items-start gap-3.5 group">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100/70 border border-emerald-200 flex items-center justify-center text-emerald-800 shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                      <FileText className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-slate-800 text-base">Innovate</h3>
+                      <p className="text-xs text-slate-600 leading-normal">
+                        Find policy solutions and research gaps for sustainable land management.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3.5 group">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100/70 border border-emerald-200 flex items-center justify-center text-emerald-800 shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                      <CheckCircle2 className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-slate-800 text-base">Build a Sustainable Future</h3>
+                      <p className="text-xs text-slate-600 leading-normal">
+                        Together for better land governance and a stronger tomorrow.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom Quote Banner */}
+                <div className="pt-4 flex items-center gap-2 text-emerald-900/90 text-xs font-semibold italic">
+                  <Leaf className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Healthy Land • Stronger Communities • A Sustainable India</span>
+                </div>
+              </>
+            )}
           </div>
 
           {/* RIGHT AUTH CARD WRAPPER */}

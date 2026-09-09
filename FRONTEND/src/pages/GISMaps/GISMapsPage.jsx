@@ -25,6 +25,17 @@ import {
   X,
   Database,
   Sliders,
+  AlertTriangle,
+  FileCheck,
+  Ruler,
+  TrendingUp,
+  FileText,
+  Activity,
+  Navigation,
+  Crosshair,
+  ExternalLink,
+  BookOpen,
+  Scale,
 } from 'lucide-react';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
@@ -38,6 +49,11 @@ import {
   MOCK_RECENT_MAPS,
   MOCK_FEATURED_DATASETS,
   MOCK_DETECTED_CHANGES,
+  MOCK_FIELD_VERIFICATION_QUEUE,
+  MOCK_SPATIAL_RISK_MODELS,
+  MOCK_SATELLITE_INTELLIGENCE,
+  MOCK_SAVED_AREAS,
+  MOCK_GIS_TOOLS,
   getAIGISResponse,
 } from '../../api/gisApi';
 
@@ -57,23 +73,26 @@ export const GISMapsPage = () => {
   ]);
   const [activeBaseMap, setActiveBaseMap] = useState('Satellite Imagery');
 
-  // Quick Analysis Form state
-  const [analysisTab, setAnalysisTab] = useState('By Location');
+  // Location Hierarchy state
   const [selectedState, setSelectedState] = useState('West Bengal');
-  const [selectedDistrict, setSelectedDistrict] = useState('Nadia');
-  const [selectedBlock, setSelectedBlock] = useState('Krishnanagar');
-  const [selectedVillage, setSelectedVillage] = useState('-- Select Village --');
+  const [selectedDistrict, setSelectedDistrict] = useState('North 24 Parganas');
+  const [selectedBlock, setSelectedBlock] = useState('Barasat');
+  const [selectedVillage, setSelectedVillage] = useState('Barasat North');
 
   // Timeline year state
   const [timelineYear, setTimelineYear] = useState(2025);
 
-  // AI Assistant state
+  // AI Assistant state ("Ask the Map")
+  const [mapQuery, setMapQuery] = useState('');
   const [aiActive, setAiActive] = useState(false);
   const [aiResponse, setAiResponse] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
 
+  // Field Verification state
+  const [verifications, setVerifications] = useState(MOCK_FIELD_VERIFICATION_QUEUE);
+
   // Saved map views
-  const [savedAreas, setSavedAreas] = useState([]);
+  const [savedAreas, setSavedAreas] = useState(['North 24 Parganas District']);
 
   const toggleLayer = (layerName) => {
     if (activeLayers.includes(layerName)) {
@@ -83,18 +102,18 @@ export const GISMapsPage = () => {
     }
   };
 
-  const handleGenerateAnalysis = () => {
+  const handleAskMap = (q = mapQuery) => {
+    if (!q) return;
     setAiLoading(true);
     setAiActive(true);
     setTimeout(() => {
-      const resp = getAIGISResponse(`Generate spatial analysis for ${selectedBlock}, ${selectedDistrict}`, `${selectedDistrict}, ${selectedState}`);
+      const resp = getAIGISResponse(q, `${selectedBlock}, ${selectedDistrict}`);
       setAiResponse(resp);
       setAiLoading(false);
-    }, 500);
+    }, 600);
   };
 
-  const toggleSaveArea = () => {
-    const name = `${selectedBlock}, ${selectedDistrict}`;
+  const toggleSaveArea = (name) => {
     if (savedAreas.includes(name)) {
       setSavedAreas(savedAreas.filter((a) => a !== name));
     } else {
@@ -102,44 +121,60 @@ export const GISMapsPage = () => {
     }
   };
 
+  const markVerified = (id) => {
+    setVerifications(
+      verifications.map((item) => (item.id === id ? { ...item, status: 'Verified' } : item))
+    );
+  };
+
   return (
-    <div className="space-y-8 text-left pb-12 font-sans">
-      {/* 1. HEADER / BREADCRUMB WITH QUOTE BOX (MATCHING IMAGE 5 MOCKUP) */}
+    <div className="space-y-8 text-left pb-12 font-sans bg-slate-50/40 p-2 sm:p-4 rounded-3xl">
+      {/* 1. COMPACT GIS WORKSPACE HEADER (SECTION 4) */}
       <div className="space-y-2">
-        <div className="flex items-center gap-2 text-xs font-semibold text-emerald-800">
-          <Link to="/dashboard/public" className="hover:underline">Home</Link>
-          <span className="text-slate-400">/</span>
-          <span className="text-slate-600 font-normal">GIS & Maps</span>
+        <div className="flex items-center justify-between text-xs font-semibold text-emerald-800 border-b border-slate-200/80 pb-2">
+          <div className="flex items-center gap-2">
+            <Link to="/dashboard/public" className="hover:underline">Home</Link>
+            <span className="text-slate-400">/</span>
+            <span className="text-emerald-950 font-bold">GIS INTELLIGENCE WORKSPACE</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#064e3b] bg-emerald-100 px-3 py-0.5 rounded-full border border-emerald-300">
+              GIS FIELD OFFICER / EXPERT PORTAL
+            </span>
+            <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded border border-amber-200">
+              Demo Data
+            </span>
+          </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#064e3b] via-[#047857] to-[#0f766e] p-6 text-white shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-2 max-w-2xl">
+        <div className="relative overflow-hidden rounded-3xl bg-[#064e3b] p-6 text-white shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="space-y-2 max-w-2xl z-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-200 text-xs font-semibold backdrop-blur-sm">
               <Globe className="w-3.5 h-3.5 text-emerald-300" />
-              <span>National Spatial Intelligence Studio</span>
+              <span>National Spatial Monitoring Room</span>
             </div>
-            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
-              GIS & Maps
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              GIS Intelligence Workspace
             </h1>
             <p className="text-emerald-100 text-xs sm:text-sm leading-relaxed">
-              Visualize land, analyze patterns, and explore geospatial insights across India.
+              Monitor land-use change, analyse spatial patterns, and identify geographic risks across India's cadastral and satellite datasets.
             </p>
           </div>
 
-          {/* Floating Quote Box (Matching Image 5 Mockup) */}
-          <div className="bg-white/15 backdrop-blur-md p-4 rounded-2xl border border-white/20 max-w-xs text-right hidden sm:block shrink-0">
-            <p className="text-xs italic font-medium text-emerald-100 leading-snug">
-              "Maps turn data into direction."
-            </p>
-            <div className="flex items-center justify-end gap-1 text-[11px] font-bold text-emerald-300 mt-2">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>BHOOMIVISION Spatial Lab</span>
+          <div className="shrink-0 flex items-center gap-3 z-10">
+            <div className="bg-white/15 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/20 text-center">
+              <p className="text-[10px] text-emerald-200 uppercase font-semibold">Active Spatial Location</p>
+              <p className="text-xs font-bold text-white">{selectedDistrict}, {selectedState}</p>
+            </div>
+            <div className="bg-white/15 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/20 text-center">
+              <p className="text-[10px] text-emerald-200 uppercase font-semibold">Satellite Feed Status</p>
+              <p className="text-xs font-bold text-emerald-300">Sentinel-2 (Demo Sync)</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 2. TOP FEATURE TABS (MATCHING IMAGE 5 MOCKUP) */}
+      {/* 2. GIS OPERATIONAL ROLE NAVIGATION / FEATURE TABS (SECTION 3) */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
         {GIS_FEATURE_TABS.map((tab) => {
           const isSelected = activeTab === tab.id;
@@ -147,7 +182,7 @@ export const GISMapsPage = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`p-3.5 rounded-2xl border text-left transition-all flex flex-col justify-between gap-2 group ${
+              className={`p-3 rounded-2xl border text-left transition-all flex flex-col justify-between gap-2 group ${
                 isSelected
                   ? 'bg-[#064e3b] text-white border-[#064e3b] shadow-md'
                   : 'bg-white text-slate-800 border-slate-200 hover:border-emerald-500'
@@ -155,11 +190,11 @@ export const GISMapsPage = () => {
             >
               <div className="flex items-center justify-between">
                 <div
-                  className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                  className={`w-7 h-7 rounded-xl flex items-center justify-center ${
                     isSelected ? 'bg-emerald-700 text-white' : 'bg-emerald-100 text-emerald-800'
                   }`}
                 >
-                  <Map className="w-4 h-4" />
+                  <Map className="w-3.5 h-3.5" />
                 </div>
               </div>
 
@@ -174,9 +209,30 @@ export const GISMapsPage = () => {
         })}
       </div>
 
-      {/* 3. MAIN 3-COLUMN MAP WORKSPACE STUDIO (EXACT MATCH FOR IMAGE 5 MOCKUP) */}
+      {/* 3. GIS WORKSPACE QUICK TOOLS BAR (SECTION 24) */}
+      <Card className="p-3 bg-white border-slate-200">
+        <div className="flex items-center justify-between overflow-x-auto gap-2">
+          <span className="text-[11px] font-bold text-slate-700 uppercase shrink-0 flex items-center gap-1.5 px-2">
+            <Ruler className="w-3.5 h-3.5 text-emerald-800" />
+            <span>GIS Tools:</span>
+          </span>
+          <div className="flex items-center gap-2 shrink-0">
+            {MOCK_GIS_TOOLS.map((tool) => (
+              <button
+                key={tool.id}
+                onClick={() => handleAskMap(`Execute tool: ${tool.name}`)}
+                className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-emerald-100/70 text-slate-800 text-xs font-semibold border border-slate-200 transition-colors flex items-center gap-1.5"
+              >
+                <span>{tool.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </Card>
+
+      {/* 4. PRIMARY MAP WORKSPACE (SECTION 5 & 6) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* LEFT COLUMN: MAP LAYERS PANEL (3 COLS) */}
+        {/* LEFT COLUMN: MAP LAYERS CONTROL PANEL (3 COLS) */}
         <div className="lg:col-span-3 space-y-4">
           <LayerControlPanel
             activeLayers={activeLayers}
@@ -195,31 +251,37 @@ export const GISMapsPage = () => {
                 <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
                 <input
                   type="text"
-                  placeholder="Search location (State, District, Block, Village...)"
+                  value={mapQuery}
+                  onChange={(e) => setMapQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleAskMap()}
+                  placeholder="Search location (State, District, Block, Plot Cadastral ID...)"
                   className="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-700/30"
                 />
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
-                <select className="bg-slate-50 border border-slate-200 text-xs px-2 py-1.5 rounded-xl text-slate-700 font-semibold">
-                  <option value="India">India</option>
-                  <option value="West Bengal">West Bengal</option>
-                </select>
-
+                <Button
+                  onClick={() => handleAskMap()}
+                  variant="primary"
+                  size="sm"
+                  className="text-xs font-bold rounded-xl py-1.5 bg-[#064e3b]"
+                >
+                  <Search className="w-3.5 h-3.5" />
+                  <span>Search</span>
+                </Button>
                 <button
                   type="button"
                   className="p-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs flex items-center gap-1 font-semibold"
                   title="Full Screen"
                 >
                   <Maximize2 className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Full Screen</span>
                 </button>
               </div>
             </div>
 
             {/* Map Canvas */}
             <div className="h-[480px] relative">
-              <LeafletMap center={[23.471, 88.556]} zoom={10} className="w-full h-full" />
+              <LeafletMap center={[22.7214, 88.4816]} zoom={11} className="w-full h-full" />
 
               {/* Bhuvan Layer Badge Overlay */}
               <div className="absolute top-3 left-3 z-10">
@@ -234,34 +296,18 @@ export const GISMapsPage = () => {
           </Card>
         </div>
 
-        {/* RIGHT COLUMN: QUICK ANALYSIS & MAP INFO (3 COLS) */}
+        {/* RIGHT COLUMN: LOCATION INTELLIGENCE & AREA PANEL (3 COLS) (SECTION 7 & 17) */}
         <div className="lg:col-span-3 space-y-4">
-          {/* Quick Analysis Form */}
+          {/* Location Hierarchy Selector */}
           <Card className="p-4 bg-white border-slate-200 space-y-3">
-            <div className="flex items-center gap-2 text-emerald-900 font-bold text-xs border-b border-slate-100 pb-2">
-              <Zap className="w-4 h-4 text-emerald-700" />
-              <span>Quick Analysis</span>
+            <div className="flex items-center gap-2 text-emerald-950 font-bold text-xs border-b border-slate-100 pb-2">
+              <Compass className="w-4 h-4 text-emerald-700" />
+              <span>Location Intelligence Hierarchy</span>
             </div>
 
-            {/* Form Tabs */}
-            <div className="flex items-center justify-between bg-slate-100 p-1 rounded-xl text-[11px] font-semibold text-slate-600">
-              {['By Location', 'By Layer', 'By Area'].map((tb) => (
-                <button
-                  key={tb}
-                  onClick={() => setAnalysisTab(tb)}
-                  className={`px-2.5 py-1 rounded-lg transition-all ${
-                    analysisTab === tb ? 'bg-emerald-800 text-white font-bold' : 'hover:text-slate-900'
-                  }`}
-                >
-                  {tb}
-                </button>
-              ))}
-            </div>
-
-            {/* Dropdowns */}
             <div className="space-y-2 text-left">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-600 mb-0.5">Select State</label>
+                <label className="block text-[11px] font-semibold text-slate-600 mb-0.5">State</label>
                 <select
                   value={selectedState}
                   onChange={(e) => setSelectedState(e.target.value)}
@@ -269,66 +315,69 @@ export const GISMapsPage = () => {
                 >
                   <option value="West Bengal">West Bengal</option>
                   <option value="Gujarat">Gujarat</option>
+                  <option value="Karnataka">Karnataka</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-600 mb-0.5">Select District</label>
+                <label className="block text-[11px] font-semibold text-slate-600 mb-0.5">District</label>
                 <select
                   value={selectedDistrict}
                   onChange={(e) => setSelectedDistrict(e.target.value)}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs p-2 text-slate-800 font-semibold"
                 >
+                  <option value="North 24 Parganas">North 24 Parganas</option>
                   <option value="Nadia">Nadia</option>
                   <option value="Ahmedabad">Ahmedabad</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-600 mb-0.5">Select Block</label>
+                <label className="block text-[11px] font-semibold text-slate-600 mb-0.5">Sub-District / Block</label>
                 <select
                   value={selectedBlock}
                   onChange={(e) => setSelectedBlock(e.target.value)}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs p-2 text-slate-800 font-semibold"
                 >
+                  <option value="Barasat">Barasat</option>
+                  <option value="Habra">Habra</option>
                   <option value="Krishnanagar">Krishnanagar</option>
-                  <option value="Ranaghat">Ranaghat</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-600 mb-0.5">Select Village (Optional)</label>
+                <label className="block text-[11px] font-semibold text-slate-600 mb-0.5">Village / Area</label>
                 <select
                   value={selectedVillage}
                   onChange={(e) => setSelectedVillage(e.target.value)}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs p-2 text-slate-800 font-semibold"
                 >
-                  <option value="-- Select Village --">-- Select Village --</option>
+                  <option value="Barasat North">Barasat North</option>
                   <option value="Krishnanagar North">Krishnanagar North</option>
                 </select>
               </div>
             </div>
 
             <Button
-              onClick={handleGenerateAnalysis}
+              onClick={() => handleAskMap(`Run spatial analysis for ${selectedBlock}, ${selectedDistrict}`)}
               variant="primary"
-              className="w-full text-xs font-semibold py-2.5 rounded-xl"
+              className="w-full text-xs font-bold py-2.5 rounded-xl bg-[#064e3b]"
             >
-              <Search className="w-3.5 h-3.5" />
-              <span>Generate Map & Analysis</span>
+              <Zap className="w-3.5 h-3.5" />
+              <span>Analyse Selected Area</span>
             </Button>
           </Card>
 
-          {/* Map Info Card */}
+          {/* Area Intelligence Card */}
           <Card className="p-4 bg-slate-50 border-slate-200 space-y-3">
             <div className="flex items-center justify-between border-b border-slate-200 pb-2">
               <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
                 <MapPin className="w-4 h-4 text-emerald-800" />
-                <span>Map Info</span>
+                <span>Area Intelligence</span>
               </div>
 
               <button
-                onClick={toggleSaveArea}
+                onClick={() => toggleSaveArea(`${selectedBlock}, ${selectedDistrict}`)}
                 className="text-[11px] text-emerald-800 font-semibold hover:underline flex items-center gap-1"
               >
                 {savedAreas.includes(`${selectedBlock}, ${selectedDistrict}`) ? (
@@ -347,88 +396,222 @@ export const GISMapsPage = () => {
 
             <div className="space-y-1.5 text-xs text-slate-700">
               <div className="flex justify-between">
-                <span className="text-slate-500">State:</span>
-                <span className="font-bold">{selectedState}</span>
+                <span className="text-slate-500">Location:</span>
+                <span className="font-bold">{selectedBlock}, {selectedDistrict}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">District:</span>
-                <span className="font-bold">{selectedDistrict}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500">Block:</span>
-                <span className="font-bold">{selectedBlock}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500">Area (Approx.):</span>
+                <span className="text-slate-500">Total Area:</span>
                 <span className="font-bold">{MOCK_LULC_STATS.totalAreaSqKm} km²</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Population (2021):</span>
-                <span className="font-bold">{MOCK_LULC_STATS.population}</span>
+                <span className="text-slate-500">LULC Change Rate:</span>
+                <span className="font-bold text-amber-700">+18.2% Sprawl</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Risk Level:</span>
+                <span className="font-bold text-red-700">High Risk (Hotspot)</span>
               </div>
             </div>
 
-            <Button variant="outline" size="sm" className="w-full text-xs font-semibold rounded-xl">
-              <span>View Detailed Report →</span>
-            </Button>
+            <Link to="/reports" className="block">
+              <Button variant="outline" size="sm" className="w-full text-xs font-semibold rounded-xl">
+                <span>Generate Area Report →</span>
+              </Button>
+            </Link>
           </Card>
         </div>
       </div>
 
-      {/* 4. AI SPATIAL ASSISTANT RESPONSE CARD (WHEN ACTIVE) */}
-      {aiActive && (
-        <Card className="bg-gradient-to-br from-emerald-950 via-[#064e3b] to-teal-950 text-white p-6 rounded-3xl space-y-4 border-none shadow-xl">
-          <div className="flex items-center justify-between border-b border-emerald-700/50 pb-3">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-emerald-700/80 flex items-center justify-center text-emerald-300">
-                <Sparkles className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="font-extrabold text-base text-white">BHOOMIVISION GIS Intelligence</h3>
-                <p className="text-[11px] text-emerald-200">Grounded Spatial Analytics Engine</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <span className="px-3 py-1 rounded-full bg-emerald-800 text-emerald-200 text-xs font-bold border border-emerald-600">
-                Confidence: {aiResponse?.confidence || '96%'}
-              </span>
-              <button onClick={() => setAiActive(false)} className="text-emerald-300 hover:text-white">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+      {/* 5. ASK THE MAP (GIS AI ASSISTANT - SECTION 11 & 20) */}
+      <Card className="p-5 bg-white border-slate-200 space-y-4">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+          <div className="space-y-0.5">
+            <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-emerald-800" />
+              <span>Ask the Map (GIS Spatial Assistant)</span>
+            </h3>
+            <p className="text-xs text-slate-500">Ask spatial intelligence questions regarding change detection, land-use pressure, or hotspot risks.</p>
           </div>
+          <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+            Demo AI Assistant
+          </span>
+        </div>
 
-          {aiLoading ? (
-            <div className="py-6 text-center text-emerald-200 text-xs">Transposing satellite bands & spatial vectors...</div>
-          ) : (
-            <div className="space-y-3">
-              <p className="text-xs text-emerald-300 font-semibold uppercase">Spatial Query:</p>
-              <p className="text-sm font-bold text-white italic">"{aiResponse?.query}"</p>
-              <div className="p-4 bg-emerald-900/60 rounded-2xl border border-emerald-700/60 text-xs text-emerald-100 leading-relaxed">
-                {aiResponse?.insight}
-              </div>
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            value={mapQuery}
+            onChange={(e) => setMapQuery(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleAskMap()}
+            placeholder="e.g. Where is built-up expansion highest in North 24 Parganas?"
+            className="flex-1 bg-slate-50 border border-slate-300 rounded-2xl text-xs p-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-700/40"
+          />
+          <Button
+            onClick={() => handleAskMap()}
+            variant="primary"
+            className="text-xs font-bold py-3 px-5 rounded-2xl bg-[#064e3b]"
+          >
+            <span>Ask Map</span>
+          </Button>
+        </div>
+
+        <div className="flex flex-wrap gap-2 text-xs">
+          <span className="text-slate-500 font-bold text-[11px]">Suggested Spatial Queries:</span>
+          {[
+            'Where is built-up expansion highest?',
+            'Show areas with agricultural land conversion.',
+            'Which areas have high development pressure?',
+            'Show water-body shrinkage hotspots.',
+          ].map((sq, i) => (
+            <button
+              key={i}
+              onClick={() => {
+                setMapQuery(sq);
+                handleAskMap(sq);
+              }}
+              className="px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-950 border border-emerald-200 hover:bg-emerald-100 text-[11px] font-medium"
+            >
+              💡 {sq}
+            </button>
+          ))}
+        </div>
+
+        {aiActive && (
+          <div className="p-4 bg-emerald-950 text-white rounded-2xl space-y-2 text-xs">
+            <div className="flex items-center justify-between text-emerald-300 font-bold text-[11px]">
+              <span>AI MAP INSIGHT (Demo AI):</span>
+              <span>{aiResponse?.confidence || '96% Confidence'}</span>
             </div>
-          )}
-        </Card>
-      )}
+            <p className="text-emerald-100 leading-relaxed">{aiResponse?.insight}</p>
+          </div>
+        )}
+      </Card>
 
-      {/* 5. TIME-SERIES MAP TIMELINE & DETECTED CHANGES */}
+      {/* 6. SPATIAL RISK & HOTSPOT INTELLIGENCE (SECTION 12) */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-red-700" />
+            <span>Spatial Risk & Hotspot Intelligence</span>
+          </h3>
+          <span className="text-[10px] font-bold text-red-900 bg-red-100 px-2.5 py-0.5 rounded border border-red-300">
+            Illustrative Risk Model
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {MOCK_SPATIAL_RISK_MODELS.map((risk) => (
+            <Card key={risk.id} className="bg-white border-slate-200 p-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold border ${risk.color}`}>
+                  {risk.level}
+                </span>
+                <span className="text-[10px] font-bold text-slate-400">{risk.modelLabel}</span>
+              </div>
+
+              <div className="space-y-1">
+                <h4 className="font-bold text-slate-800 text-xs">{risk.category}</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">{risk.summary}</p>
+              </div>
+
+              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+                <span>Location: {risk.location}</span>
+                <button
+                  onClick={() => handleAskMap(`Focus risk hotspot on map: ${risk.location}`)}
+                  className="text-emerald-800 font-bold hover:underline"
+                >
+                  View on Map →
+                </button>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+
+      {/* 7. FIELD VERIFICATION QUEUE & OBSERVATION (SECTION 13 & 14) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* TIMELINE SLIDER (7 COLS) */}
         <div className="lg:col-span-7 space-y-4">
           <Card className="p-6 bg-white border-slate-200 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="space-y-0.5">
                 <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-emerald-800" />
-                  <span>Explore Land Change Over Time</span>
+                  <FileCheck className="w-4 h-4 text-emerald-800" />
+                  <span>Field Verification Queue</span>
                 </h3>
-                <p className="text-xs text-slate-500">Multi-temporal satellite monitoring (*Illustrative Timeline*)</p>
+                <p className="text-xs text-slate-500">Areas flagged for on-ground GIS field officer verification</p>
               </div>
+              <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded">
+                Demo Queue
+              </span>
             </div>
 
-            {/* Timeline Year Tabs */}
+            <div className="space-y-3">
+              {verifications.map((item) => (
+                <div key={item.id} className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2 text-xs">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-800">{item.area} ({item.district})</span>
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                      item.status === 'Verified' ? 'bg-emerald-100 text-emerald-900' : 'bg-amber-100 text-amber-900'
+                    }`}>
+                      {item.status}
+                    </span>
+                  </div>
+
+                  <p className="text-slate-600"><strong>Reason:</strong> {item.reason}</p>
+
+                  <div className="flex items-center justify-between pt-1 border-t border-slate-200 text-[11px] text-slate-500">
+                    <span>GPS: {item.coordinates}</span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => markVerified(item.id)}
+                        className="text-emerald-800 font-bold hover:underline"
+                      >
+                        {item.status === 'Verified' ? 'Verified' : 'Mark Verified'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
+
+        {/* SATELLITE INTELLIGENCE (SECTION 15) */}
+        <div className="lg:col-span-5 space-y-4">
+          <Card className="p-6 bg-white border-slate-200 space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
+                <Globe className="w-4 h-4 text-emerald-800" />
+                <span>Satellite Intelligence Metadata</span>
+              </h3>
+            </div>
+
+            <div className="space-y-2 text-xs text-slate-700 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+              <p><strong>Provider:</strong> {MOCK_SATELLITE_INTELLIGENCE.provider}</p>
+              <p><strong>Last Pass Date:</strong> {MOCK_SATELLITE_INTELLIGENCE.lastPassDate}</p>
+              <p><strong>Cloud Inundation:</strong> {MOCK_SATELLITE_INTELLIGENCE.cloudCover}</p>
+              <p><strong>Resolution:</strong> {MOCK_SATELLITE_INTELLIGENCE.resolution}</p>
+              <p><strong>Bands:</strong> {MOCK_SATELLITE_INTELLIGENCE.activeSensors.join(', ')}</p>
+            </div>
+
+            <Button variant="outline" className="w-full text-xs font-semibold py-2 rounded-xl">
+              <span>View Multi-Spectral Bands →</span>
+            </Button>
+          </Card>
+        </div>
+      </div>
+
+      {/* 8. LAND CHANGE TIMELINE & DETECTED CHANGES (SECTION 9 & 16) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="lg:col-span-7 space-y-4">
+          <Card className="p-6 bg-white border-slate-200 space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-emerald-800" />
+                <span>Land Change Timeline (2010–2025)</span>
+              </h3>
+            </div>
+
             <div className="flex items-center justify-between bg-slate-100 p-1.5 rounded-2xl">
               {[2010, 2015, 2020, 2025].map((yr) => (
                 <button
@@ -448,7 +631,7 @@ export const GISMapsPage = () => {
             <div className="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-200/70 space-y-2 text-xs">
               <h4 className="font-bold text-slate-800">
                 {timelineYear === 2025 && '2025: High-Res Drone Orthomosaic Sync & DILRMP GIS Integration'}
-                {timelineYear === 2020 && '2020: Sentinel-2 Multi-Spectral Baseline for Nadia Sprawl'}
+                {timelineYear === 2020 && '2020: Sentinel-2 Multi-Spectral Baseline for Sprawl'}
                 {timelineYear === 2015 && '2015: Initial Landsat LULC Time-Series Mapping'}
                 {timelineYear === 2010 && '2010: Historical Baseline Satellite Survey'}
               </h4>
@@ -462,105 +645,76 @@ export const GISMapsPage = () => {
           </Card>
         </div>
 
-        {/* DETECTED LAND CHANGES (5 COLS) */}
         <div className="lg:col-span-5 space-y-4">
-          <Card className="p-6 bg-white border-slate-200 space-y-4 h-full flex flex-col justify-between">
-            <div className="space-y-3">
-              <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
-                <Sliders className="w-4 h-4 text-emerald-800" />
-                <span>Detected Land Changes</span>
-              </h3>
+          <Card className="p-6 bg-white border-slate-200 space-y-4">
+            <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
+              <Sliders className="w-4 h-4 text-emerald-800" />
+              <span>Detected Spatial Changes</span>
+            </h3>
 
-              <div className="space-y-3">
-                {MOCK_DETECTED_CHANGES.map((chg) => (
-                  <div key={chg.id} className="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-1 text-xs">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-emerald-900">{chg.changeType}</span>
-                      <span className="text-[10px] font-semibold text-slate-400">{chg.period}</span>
-                    </div>
-                    <p className="text-slate-600">Location: {chg.location}</p>
-                    <p className="text-slate-600 font-semibold">Area: {chg.areaAffected}</p>
+            <div className="space-y-3">
+              {MOCK_DETECTED_CHANGES.map((chg) => (
+                <div key={chg.id} className="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-1 text-xs">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-emerald-900">{chg.changeType}</span>
+                    <span className="text-[10px] font-semibold text-slate-400">{chg.period}</span>
                   </div>
-                ))}
-              </div>
+                  <p className="text-slate-600">Location: {chg.location}</p>
+                  <p className="text-slate-600 font-semibold">Area: {chg.areaAffected}</p>
+                </div>
+              ))}
             </div>
           </Card>
         </div>
       </div>
 
-      {/* 6. BOTTOM DATA SECTION (3 CARDS - EXACT MATCH FOR IMAGE 5 MOCKUP) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Card 1: Land Use Statistics (Selected Area) */}
-        <Card className="p-5 bg-white border-slate-200 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-            <h4 className="font-bold text-xs text-slate-800 uppercase">Land Use Statistics (Selected Area)</h4>
-            <BarChart3 className="w-4 h-4 text-emerald-800" />
-          </div>
+      {/* 9. CROSS-MODULE CONNECTIONS: RESEARCH & POLICY (SECTION 18 & 19) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="lg:col-span-6 space-y-3">
+          <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
+            <BookOpen className="w-4 h-4 text-emerald-800" />
+            <span>Research Linked to Spatial Area</span>
+          </h3>
 
-          <div className="space-y-3">
-            <div className="flex items-center justify-center p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100">
-              <div className="w-28 h-28 rounded-full border-8 border-emerald-600 border-t-amber-400 border-r-sky-400 flex items-center justify-center font-extrabold text-sm text-[#064e3b]">
-                1,248 km²
-              </div>
+          <Card className="bg-white border-slate-200 p-5 space-y-3">
+            <div className="space-y-1">
+              <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-950 text-[10px] font-bold">
+                GIS Study
+              </span>
+              <h4 className="font-bold text-slate-800 text-xs">Land Use Transformation and Agricultural Shrinkage in Nadia</h4>
+              <p className="text-xs text-slate-600">ISRO-NRSC study verifying satellite cropland shrinkage.</p>
             </div>
+            <Link to="/research">
+              <Button variant="outline" className="w-full text-xs font-semibold py-1.5 mt-1">
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Explore Full Research Study</span>
+              </Button>
+            </Link>
+          </Card>
+        </div>
 
-            <div className="space-y-2 text-xs">
-              {MOCK_LULC_STATS.categories.map((cat) => (
-                <div key={cat.name} className="flex items-center justify-between">
-                  <span className="flex items-center gap-2 text-slate-700">
-                    <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: cat.color }} />
-                    <span>{cat.name}</span>
-                  </span>
-                  <span className="font-bold text-slate-800">{cat.percent}%</span>
-                </div>
-              ))}
+        <div className="lg:col-span-6 space-y-3">
+          <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
+            <Scale className="w-4 h-4 text-emerald-800" />
+            <span>Policy Impact on Selected Spatial Area</span>
+          </h3>
+
+          <Card className="bg-white border-slate-200 p-5 space-y-3">
+            <div className="space-y-1">
+              <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-950 text-[10px] font-bold">
+                Land Policy
+              </span>
+              <h4 className="font-bold text-slate-800 text-xs">Digital India Land Records Modernization (DILRMP)</h4>
+              <p className="text-xs text-slate-600">Drone cadastral survey policy regulating non-farm land conversions.</p>
             </div>
-          </div>
-        </Card>
-
-        {/* Card 2: Recent Maps */}
-        <Card className="p-5 bg-white border-slate-200 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-            <h4 className="font-bold text-xs text-slate-800 uppercase">Recent Maps</h4>
-            <span className="text-xs text-emerald-800 font-bold hover:underline cursor-pointer">View All →</span>
-          </div>
-
-          <div className="space-y-3">
-            {MOCK_RECENT_MAPS.map((mp) => (
-              <div key={mp.id} className="p-2.5 bg-slate-50 hover:bg-emerald-50/50 rounded-xl border border-slate-200 flex items-center justify-between transition-colors">
-                <div>
-                  <h5 className="font-bold text-xs text-slate-800">{mp.title}</h5>
-                  <p className="text-[10px] text-slate-500">{mp.date} • <span className="font-semibold text-emerald-800">{mp.layerType}</span></p>
-                </div>
-                <button className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-800 hover:bg-slate-100">
-                  <Download className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
-          </div>
-        </Card>
-
-        {/* Card 3: Featured Datasets */}
-        <Card className="p-5 bg-white border-slate-200 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-            <h4 className="font-bold text-xs text-slate-800 uppercase">Featured Datasets</h4>
-            <span className="text-xs text-emerald-800 font-bold hover:underline cursor-pointer">View All →</span>
-          </div>
-
-          <div className="space-y-3">
-            {MOCK_FEATURED_DATASETS.map((ds) => (
-              <div key={ds.id} className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
-                <div>
-                  <h5 className="font-bold text-xs text-slate-800">{ds.title}</h5>
-                  <p className="text-[10px] font-semibold text-slate-500">{ds.size}</p>
-                </div>
-                <Button variant="outline" size="sm" className="text-[11px] py-1 px-2.5 rounded-lg">
-                  <span>Download</span>
-                </Button>
-              </div>
-            ))}
-          </div>
-        </Card>
+            <Link to="/policy-innovation">
+              <Button variant="outline" className="w-full text-xs font-semibold py-1.5 mt-1">
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>View Policy Intelligence</span>
+              </Button>
+            </Link>
+          </Card>
+        </div>
       </div>
     </div>
   );

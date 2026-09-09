@@ -21,6 +21,7 @@ export const roleAccessMap = {
     '/profile',
   ],
   [ROLES.GIS_OFFICER]: [
+    '/dashboard/gis-expert',
     '/dashboard/gis',
     '/home',
     '/gis-maps',

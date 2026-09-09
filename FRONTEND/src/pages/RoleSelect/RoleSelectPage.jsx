@@ -33,12 +33,12 @@ export const RoleSelectPage = () => {
       title: 'Researcher / Analyst',
       description: 'Access detailed research, datasets, reports and advanced analysis tools.',
       icon: Search,
-      bgColor: 'bg-sky-100/80',
-      iconColor: 'text-sky-800',
-      borderColor: 'border-sky-500',
-      radioColor: 'accent-sky-700',
-      activeBg: 'bg-sky-50/80 border-sky-600 ring-2 ring-sky-600/20',
-      available: false,
+      bgColor: 'bg-[#064e3b]/10',
+      iconColor: 'text-[#064e3b]',
+      borderColor: 'border-[#064e3b]',
+      radioColor: 'accent-[#064e3b]',
+      activeBg: 'bg-emerald-50/90 border-[#064e3b] ring-2 ring-[#064e3b]/20',
+      available: true,
     },
     {
       id: ROLES.GIS_OFFICER,
@@ -50,7 +50,7 @@ export const RoleSelectPage = () => {
       borderColor: 'border-purple-500',
       radioColor: 'accent-purple-700',
       activeBg: 'bg-purple-50/80 border-purple-600 ring-2 ring-purple-600/20',
-      available: false,
+      available: true,
     },
     {
       id: ROLES.GOVT_OFFICER,
@@ -62,7 +62,7 @@ export const RoleSelectPage = () => {
       borderColor: 'border-amber-500',
       radioColor: 'accent-amber-700',
       activeBg: 'bg-amber-50/80 border-amber-600 ring-2 ring-amber-600/20',
-      available: false,
+      available: true,
     },
     {
       id: ROLES.ADMIN,
@@ -74,7 +74,7 @@ export const RoleSelectPage = () => {
       borderColor: 'border-slate-400',
       radioColor: 'accent-slate-700',
       activeBg: 'bg-slate-50 border-slate-500 ring-2 ring-slate-500/20',
-      available: false,
+      available: true,
     },
   ];
 
@@ -82,6 +82,14 @@ export const RoleSelectPage = () => {
     selectRole(roleId);
     if (roleId === ROLES.PUBLIC) {
       navigate('/auth/public/login');
+    } else if (roleId === ROLES.RESEARCHER) {
+      navigate('/auth/researcher/login');
+    } else if (roleId === ROLES.GIS_OFFICER) {
+      navigate('/auth/gis/login');
+    } else if (roleId === ROLES.GOVT_OFFICER) {
+      navigate('/auth/govt/login');
+    } else if (roleId === ROLES.ADMIN) {
+      navigate('/auth/admin/login');
     }
   };
 

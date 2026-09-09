@@ -127,6 +127,95 @@ export const MOCK_GIS_EVIDENCE = [
   },
 ];
 
+export const MOCK_FIELD_VERIFICATION_QUEUE = [
+  {
+    id: 'fv_01',
+    area: 'Barasat Sub-division',
+    district: 'North 24 Parganas',
+    reason: 'Rapid Built-up Land Conversion near Highway',
+    priority: 'High Priority',
+    status: 'Pending Verification',
+    lastObserved: '2 hours ago',
+    coordinates: '22.7214° N, 88.4816° E',
+  },
+  {
+    id: 'fv_02',
+    area: 'Habra Block-II',
+    district: 'North 24 Parganas',
+    reason: 'Agricultural Cropland to Brickfield Transition',
+    priority: 'Medium Priority',
+    status: 'Under Field Review',
+    lastObserved: '1 day ago',
+    coordinates: '22.8367° N, 88.6312° E',
+  },
+  {
+    id: 'fv_03',
+    area: 'Krishnanagar North',
+    district: 'Nadia',
+    reason: 'Wetland / Water-Body Shrinkage Encroachment',
+    priority: 'High Priority',
+    status: 'Pending Verification',
+    lastObserved: '3 days ago',
+    coordinates: '23.4012° N, 88.4975° E',
+  },
+];
+
+export const MOCK_SPATIAL_RISK_MODELS = [
+  {
+    id: 'risk_01',
+    category: 'Land Dispute Risk Hotspot',
+    level: 'High Risk',
+    color: 'bg-red-100 text-red-900 border-red-300',
+    location: 'Ranaghat & Barasat Corridor',
+    summary: 'High boundary overlap density between ancestral RoR plots and geo-referenced drone vector layers.',
+    modelLabel: 'Illustrative Risk Model',
+  },
+  {
+    id: 'risk_02',
+    category: 'Development / Sprawl Pressure',
+    level: 'High Risk',
+    color: 'bg-amber-100 text-amber-900 border-amber-300',
+    location: 'NH-34 Transit Belt',
+    summary: '+18.2% non-farm built-up expansion encroaching on primary double-crop paddy agricultural land.',
+    modelLabel: 'Illustrative Risk Model',
+  },
+  {
+    id: 'risk_03',
+    category: 'Topsoil & Environmental Degradation',
+    level: 'Medium Risk',
+    color: 'bg-amber-100 text-amber-900 border-amber-300',
+    location: 'Ranaghat Brickfield Cluster',
+    summary: '3.1% soil organic carbon degradation due to topsoil clay extraction.',
+    modelLabel: 'Illustrative Risk Model',
+  },
+];
+
+export const MOCK_SATELLITE_INTELLIGENCE = {
+  provider: 'ISRO Bhuvan & Copernicus Sentinel-2',
+  lastPassDate: '08 Mar 2026 (04:12 UTC)',
+  cloudCover: '1.2% (Low Cloud Inundation)',
+  resolution: '10m Multi-Spectral Spatial Resolution',
+  activeSensors: ['B2 (Blue)', 'B3 (Green)', 'B4 (Red)', 'B8 (NIR)', 'B11 (SWIR)'],
+  dataStatus: 'Live Feed Connected (Demo Sync)',
+};
+
+export const MOCK_SAVED_AREAS = [
+  { id: 'sa_01', name: 'North 24 Parganas District', type: 'District Boundary', changesDetected: 4 },
+  { id: 'sa_02', name: 'Nadia NH-34 Highway Belt', type: 'Buffer Corridor', changesDetected: 7 },
+  { id: 'sa_03', name: 'Barasat Peri-Urban Zone', type: 'Sub-division Vector', changesDetected: 3 },
+];
+
+export const MOCK_GIS_TOOLS = [
+  { id: 't_01', name: 'Measure Distance', icon: 'Ruler' },
+  { id: 't_02', name: 'Measure Area', icon: 'Maximize2' },
+  { id: 't_03', name: 'Compare Layers', icon: 'Sliders' },
+  { id: 't_04', name: 'Temporal Comparison', icon: 'Calendar' },
+  { id: 't_05', name: 'Spatial Query', icon: 'Search' },
+  { id: 't_06', name: 'Export Map', icon: 'Download' },
+  { id: 't_07', name: 'Save Area', icon: 'Bookmark' },
+  { id: 't_08', name: 'Generate Report', icon: 'FileText' },
+];
+
 export const getAIGISResponse = (query, location = 'Nadia, West Bengal') => {
   return {
     query: query,
