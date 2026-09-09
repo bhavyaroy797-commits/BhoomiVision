@@ -371,42 +371,6 @@ git push origin feature/your-feature-name
 
 ---
 
-## 📝 License
-
-This project is licensed under the **MIT License** - see [LICENSE](LICENSE) file for details.
-
-**You are free to:**
-- Use commercially
-- Modify the code
-- Distribute copies
-- Use privately
-
-**You must:**
-- Include license & copyright notice
-
----
-
-## 👥 Contact & Support
-
-### Team
-- **Project Lead:** Ratnadeep Nath
-- **Email:** ratnadeepnath@gmail.com
-- **Organization:** Adamas University
-
-### Issues & Feedback
-- 📧 Email: support@bhoomivision.org
-- 🐛 Report bugs: GitHub Issues
-- 💡 Feature requests: GitHub Discussions
-- 📞 Contact: +91 98765 43210
-
-### Social & Links
-- Website: (Coming soon)
-- Twitter: @BhoomiVision
-- LinkedIn: BhoomiVision
-- GitHub: https://github.com/YOUR_USERNAME/bhoomivision
-
----
-
 ## 📊 Project Stats
 
 - **Lines of Code:** 10,000+
@@ -448,18 +412,6 @@ This project is licensed under the **MIT License** - see [LICENSE](LICENSE) file
 
 ---
 
-## ⭐ Show Your Support
-
-If you find this project useful, please consider:
-- ⭐ Starring the repository
-- 🐛 Reporting bugs
-- 💡 Suggesting features
-- 🤝 Contributing code
-- 📢 Sharing with others
-
----
-
-## 📄 Changelog
 
 ### v1.0.0 (Current)
 - Initial release
