@@ -16,9 +16,17 @@ export const Topbar = () => {
 
   return (
     <header className="h-16 bg-white border-b border-emerald-900/10 px-6 flex items-center justify-between sticky top-0 z-20 shadow-xs">
-      {/* Search Input Bar */}
-      <div className="w-full max-w-xl">
-        <div className="relative">
+      {/* Brand & Search Container */}
+      <div className="flex items-center gap-3 w-full max-w-xl">
+        <div className="md:hidden shrink-0 flex items-center gap-2">
+          <img
+            src="/FRONTEND/Public/assets/image/logo.jpeg"
+            alt="BHOOMIVISION Logo"
+            className="w-8 h-8 rounded-lg object-contain border border-emerald-900/10"
+          />
+          <span className="font-bold text-xs text-[#064e3b] hidden sm:inline-block">BHOOMIVISION</span>
+        </div>
+        <div className="relative flex-1">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
           <input
             type="text"

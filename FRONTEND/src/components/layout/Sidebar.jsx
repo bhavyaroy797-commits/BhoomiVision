@@ -39,14 +39,16 @@ export const Sidebar = () => {
       {/* Brand Header */}
       <div className="p-5 border-b border-emerald-800/40">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-700/80 flex items-center justify-center text-emerald-300 shadow-md">
-            <Leaf className="w-6 h-6" />
-          </div>
-          <div>
-            <h1 className="text-lg font-extrabold tracking-tight text-white leading-tight">
+          <img
+            src="/FRONTEND/Public/assets/image/logo.jpeg"
+            alt="BHOOMIVISION Logo"
+            className="w-10 h-10 rounded-xl object-contain shadow-md shrink-0 border border-emerald-500/30 bg-white"
+          />
+          <div className="min-w-0">
+            <h1 className="text-base font-extrabold tracking-tight text-white leading-tight truncate">
               BHOOMIVISION
             </h1>
-            <p className="text-[10px] font-medium text-emerald-300 tracking-wide">
+            <p className="text-[10px] font-medium text-emerald-300 tracking-wide truncate">
               Land Insights for a Better Tomorrow
             </p>
           </div>

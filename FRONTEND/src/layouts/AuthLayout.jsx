@@ -12,7 +12,7 @@ export const AuthLayout = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center opacity-85 pointer-events-none z-0"
         style={{
-          backgroundImage: `url('/FRONTEND/Public/assets/image/background.jpeg')`,
+          backgroundImage: `url('/FRONTEND/Public/assets/image/scarch.jpeg')`,
         }}
       />
       {/* Light Glass Tint Overlay to ensure text readability */}
@@ -22,9 +22,11 @@ export const AuthLayout = () => {
       {/* TOP HEADER */}
       <header className="w-full bg-white/90 backdrop-blur-md border-b border-emerald-900/10 px-6 py-3.5 flex items-center justify-between z-10 shadow-xs">
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-[#064e3b] flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform">
-            <Leaf className="w-6 h-6 text-emerald-300" />
-          </div>
+          <img
+            src="/FRONTEND/Public/assets/image/logo.jpeg"
+            alt="BHOOMIVISION Logo"
+            className="w-10 h-10 rounded-xl object-contain shadow-md group-hover:scale-105 transition-transform shrink-0 border border-emerald-900/10 bg-white"
+          />
           <div>
             <h1 className="text-xl font-extrabold tracking-tight text-[#064e3b]">
               BHOOMIVISION
@@ -220,9 +222,11 @@ export const AuthLayout = () => {
       <footer className="w-full bg-white/90 backdrop-blur-md border-t border-emerald-900/10 px-6 py-4 z-10 text-xs text-slate-600">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-[#064e3b] flex items-center justify-center text-white">
-              <Leaf className="w-3.5 h-3.5 text-emerald-300" />
-            </div>
+            <img
+              src="/FRONTEND/Public/assets/image/logo.jpeg"
+              alt="BHOOMIVISION Logo"
+              className="w-6 h-6 rounded-md object-contain shrink-0"
+            />
             <span className="font-bold text-slate-800">BHOOMIVISION</span>
             <span className="text-slate-400">|</span>
             <span>Land Insights for a Better Tomorrow</span>

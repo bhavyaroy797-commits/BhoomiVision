@@ -49,6 +49,7 @@ import {
   getFilteredResearch,
   getAIResearchResponse,
 } from '../../api/researchApi';
+import scarchBg from '../../../Public/assets/image/scarch.jpeg';
 
 export const ResearchPage = () => {
   const { user } = useAuth();
@@ -198,25 +199,31 @@ export const ResearchPage = () => {
         </div>
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#064e3b] p-6 rounded-3xl text-white shadow-md relative overflow-hidden">
-          <div className="space-y-1 z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-200 text-xs font-semibold backdrop-blur-sm">
+          {/* High-Resolution scarch.jpeg Background Image */}
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none z-0 opacity-100"
+            style={{ backgroundImage: `url(${scarchBg})` }}
+          />
+
+          <div className="space-y-2 z-10 max-w-2xl bg-white/85 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-white/60 shadow-sm">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#064e3b] text-emerald-100 text-xs font-semibold shadow-xs">
               <Search className="w-3.5 h-3.5 text-emerald-300" />
               <span>National Land Research & Evidence Ecosystem</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#064e3b]">
               Good evening, {user?.name || 'Dr. Ananya Roy'}
             </h1>
-            <p className="text-emerald-100 text-xs sm:text-sm max-w-2xl leading-relaxed">
+            <p className="text-[#064e3b] text-xs sm:text-sm font-semibold leading-relaxed">
               Explore evidence, discover patterns and build stronger land research across India's spatial and tenure datasets.
             </p>
           </div>
 
           <div className="shrink-0 flex items-center gap-3 z-10">
-            <div className="bg-white/15 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/20 text-center">
+            <div className="bg-[#064e3b] backdrop-blur-md px-4 py-2.5 rounded-2xl border border-emerald-700/40 text-center shadow-md">
               <p className="text-[10px] text-emerald-200 uppercase font-semibold">Active Region</p>
               <p className="text-sm font-bold text-white">{selectedDistrict}, {selectedState}</p>
             </div>
-            <div className="bg-white/15 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/20 text-center">
+            <div className="bg-[#064e3b] backdrop-blur-md px-4 py-2.5 rounded-2xl border border-emerald-700/40 text-center shadow-md">
               <p className="text-[10px] text-emerald-200 uppercase font-semibold">Saved Items</p>
               <p className="text-xl font-extrabold text-emerald-300">{savedPapers.length}</p>
             </div>
