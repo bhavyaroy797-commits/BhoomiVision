@@ -1,0 +1,12 @@
+[
+  {
+    "parcel_id": "MH-PUN-001",
+    "survey_number": "112/2",
+    "district": "Pune",
+    "state": "Maharashtra",
+    "area": 1.25,
+    "owner_name": "Ramesh Patil",
+    "land_type": "agricultural",
+    "geometry": { "type": "Point", "coordinates": [73.8567, 18.5204] }
+  }
+]
