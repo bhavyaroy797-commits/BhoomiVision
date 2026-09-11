@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Search, MapPin, FileText, CheckCircle2, Leaf, Youtube, Linkedin, Twitter, Database, Layers, Scale, ShieldCheck, Sparkles, Network } from 'lucide-react';
+import { Search, MapPin, FileText, CheckCircle2, Leaf, Video, Briefcase, Share2, Database, Layers, Scale, ShieldCheck, Sparkles, Network } from 'lucide-react';
 
 export const AuthLayout = () => {
   const location = useLocation();
@@ -9,21 +9,20 @@ export const AuthLayout = () => {
   return (
     <div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-emerald-950/5 via-emerald-900/5 to-slate-100 text-slate-800 relative overflow-x-hidden font-sans">
       {/* Background Decorative Landscape Overlay */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center opacity-85 pointer-events-none z-0"
         style={{
-          backgroundImage: `url('/FRONTEND/Public/assets/image/scarch.jpeg')`,
+          backgroundImage: `url('/assets/image/scarch.jpeg')`,
         }}
       />
       {/* Light Glass Tint Overlay to ensure text readability */}
       <div className="absolute inset-0 bg-gradient-to-r from-white/70 via-white/40 to-white/60 pointer-events-none z-0 backdrop-blur-[1px]" />
 
-
       {/* TOP HEADER */}
       <header className="w-full bg-white/90 backdrop-blur-md border-b border-emerald-900/10 px-6 py-3.5 flex items-center justify-between z-10 shadow-xs">
         <Link to="/" className="flex items-center gap-3 group">
           <img
-            src="/FRONTEND/Public/assets/image/logo.jpeg"
+            src="/assets/image/logo.jpeg"
             alt="BHOOMIVISION Logo"
             className="w-10 h-10 rounded-xl object-contain shadow-md group-hover:scale-105 transition-transform shrink-0 border border-emerald-900/10 bg-white"
           />
@@ -49,7 +48,7 @@ export const AuthLayout = () => {
       {/* MAIN CONTENT WORKSPACE */}
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 py-8 flex items-center justify-center z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 w-full items-center">
-          
+
           {/* LEFT HERO PANEL */}
           <div className="lg:col-span-6 space-y-6 text-left pr-0 lg:pr-4">
             {isResearcherAuth ? (
@@ -223,7 +222,7 @@ export const AuthLayout = () => {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <img
-              src="/FRONTEND/Public/assets/image/logo.jpeg"
+              src="/assets/image/logo.jpeg"
               alt="BHOOMIVISION Logo"
               className="w-6 h-6 rounded-md object-contain shrink-0"
             />
@@ -241,13 +240,13 @@ export const AuthLayout = () => {
 
           <div className="flex items-center gap-4 text-slate-500">
             <a href="#youtube" className="hover:text-emerald-800 transition-colors" aria-label="YouTube">
-              <Youtube className="w-4 h-4" />
+              <Video className="w-4 h-4" />
             </a>
             <a href="#linkedin" className="hover:text-emerald-800 transition-colors" aria-label="LinkedIn">
-              <Linkedin className="w-4 h-4" />
+              <Briefcase className="w-4 h-4" />
             </a>
             <a href="#twitter" className="hover:text-emerald-800 transition-colors" aria-label="X Twitter">
-              <Twitter className="w-4 h-4" />
+              <Share2 className="w-4 h-4" />
             </a>
             <span className="text-slate-300">|</span>
             <span className="flex items-center gap-1 font-semibold text-emerald-900 text-[11px]">
