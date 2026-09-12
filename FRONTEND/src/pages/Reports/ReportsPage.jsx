@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import jsPDF from 'jspdf';
 import { useAuth } from '../../hooks/useAuth';
 import { Link } from 'react-router-dom';
 import {
@@ -83,7 +84,109 @@ export const ReportsPage = () => {
       setSavedReports([...savedReports, id]);
     }
   };
+const handleDownloadPDF = () => {
+  const rep = activePreviewReport;
+  if (!rep) return;
 
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  let y = 20;
+
+  // Header
+  doc.setFillColor(6, 78, 59);
+  doc.rect(0, 0, pageWidth, 30, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.text('BHOOMIVISION', 15, 15);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Land Intelligence Report', 15, 23);
+
+  // Title
+  doc.setTextColor(15, 23, 42);
+  y = 45;
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  const titleLines = doc.splitTextToSize(rep.title || 'Report', pageWidth - 30);
+  doc.text(titleLines, 15, y);
+  y += titleLines.length * 7 + 5;
+
+  // Meta
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(100, 116, 139);
+  doc.text(`Location: ${rep.location || 'N/A'}`, 15, y); y += 5;
+  doc.text(`Period: ${rep.period || 'N/A'}`, 15, y); y += 5;
+  doc.text(`Evidence: ${rep.evidenceLevel || 'N/A'}`, 15, y); y += 5;
+  doc.text(`Generated: ${new Date().toLocaleString()}`, 15, y); y += 10;
+
+  // Executive Summary
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(6, 78, 59);
+  doc.text('1. Executive Summary', 15, y); y += 7;
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(30, 41, 59);
+  const summaryLines = doc.splitTextToSize(rep.executiveSummary || rep.summary || '', pageWidth - 30);
+  doc.text(summaryLines, 15, y);
+  y += summaryLines.length * 5 + 8;
+
+  // Key Insights
+  if (rep.keyInsights && rep.keyInsights.length) {
+    if (y > 240) { doc.addPage(); y = 20; }
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(6, 78, 59);
+    doc.text('2. Key Insights', 15, y); y += 7;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(30, 41, 59);
+    rep.keyInsights.forEach((k) => {
+      const lines = doc.splitTextToSize(`• ${k}`, pageWidth - 30);
+      if (y > 270) { doc.addPage(); y = 20; }
+      doc.text(lines, 15, y);
+      y += lines.length * 5 + 2;
+    });
+    y += 5;
+  }
+
+  // Evidence Sources
+  if (rep.evidenceList && rep.evidenceList.length) {
+    if (y > 250) { doc.addPage(); y = 20; }
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(6, 78, 59);
+    doc.text('3. Evidence Sources', 15, y); y += 7;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(30, 41, 59);
+    rep.evidenceList.forEach((ev) => {
+      if (y > 270) { doc.addPage(); y = 20; }
+      doc.text(`- ${ev}`, 15, y);
+      y += 6;
+    });
+  }
+
+  // Footer
+  const pageCount = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.setFontSize(8);
+    doc.setTextColor(148, 163, 184);
+    doc.text(
+      `BHOOMIVISION • National Land Intelligence Platform • Page ${i} of ${pageCount}`,
+      pageWidth / 2,
+      doc.internal.pageSize.getHeight() - 8,
+      { align: 'center' }
+    );
+  }
+
+  // Save
+  const safeTitle = (rep.title || 'report').replace(/[^a-zA-Z0-9]/g, '_').slice(0, 50);
+  doc.save(`BHOOMIVISION_${safeTitle}.pdf`);
+};
   const handleGenerateCustomPreview = () => {
     const customRep = {
       id: `custom_${Date.now()}`,
@@ -565,9 +668,10 @@ export const ReportsPage = () => {
                 <Button onClick={() => setActivePreviewReport(null)} variant="ghost" className="text-xs rounded-xl">
                   Close
                 </Button>
-                <Button variant="outline" size="sm" className="text-xs rounded-xl opacity-75">
+                <Button onClick={handleDownloadPDF} variant="outline" 
+                size="sm" className="text-xs rounded-xl">
                   <Download className="w-3.5 h-3.5" />
-                  <span>Download PDF (Prototype)</span>
+                  <span>Download PDF</span>
                 </Button>
                 <Link to="/gis-maps">
                   <Button variant="primary" size="sm" className="text-xs rounded-xl">
